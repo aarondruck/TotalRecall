@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<!--
+    Exchange the line above for this to enable offline support
+    <html manifest="manifest.appcache">
+
+    Please make your homework before doing this:
+        http://www.alistapart.com/articles/application-cache-is-a-douchebag/
+        http://appcachefacts.info
+
+    This might be necessary to set up on your server, to make sure
+    files are updated when the appcache file itself is:
+        https://github.com/robnyman/Firefox-OS-Boilerplate-App/blob/gh-pages/.htaccess
+ -->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <link rel="stylesheet" type="text/css" href="css/base.css">
+    <link rel="stylesheet" type="text/css" href="css/headers.css">
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
+    <!-- <link rel="stylesheet" type="text/css" href="css/buttons.css">
+    <link rel="stylesheet" type="text/css" href="css/toolbars.css"> -->
+    <title>Total Recall</title>
+        <!-- Localization -->
+    <link rel="resource" type="application/l10n" href="locales/locales.ini" />
+    <script type="application/javascript" src="js/l10n.js"></script>
+    <base target="_blank">
+</head>
+
+<body>
+
+
+    <div id="my-favorite-places-list" class="page">
+
+      <header>
+
+      </header>
+
+      <div class="content">
+
+      </div>
+
+      <footer>
+
+      </footer>
+
+    </div>
+
+    <div id="my-favorite-places-page" class="page">
+
+
+    </div>
+
+
+    <div id="places-nearby-list" class="page">
+
+
+    </div>
+
+    <div id="places-nearby-list-page" class="page">
+
+
+    </div>
+
+    <div id="main">
+
+        <button id="geolocation" data-l10n-id="geolocation">Geolocation</button>
+        <div id="geolocation-display" data-l10n-id="golocation-values">Geolocation coords should show up here</div>
+
+
+        <button id="device-storage-pictures" data-l10n-id="device-storage-pictures">deviceStorage - pictures</button>
+        <div id="device-storage-pictures-display"></div>
+
+    </div>
+
+
+
+    <script type="text/javascript" src="js/base.js"></script>
+    <script type="text/javascript" src="js/webapp.js"></script>
+    <script type="text/javascript" src="js/offline.js"></script>
+
+    <!--
+        Loosely based on fxosstub: https://github.com/Jaxo/fxosstub
+    -->
+
+</body>
+</html>
