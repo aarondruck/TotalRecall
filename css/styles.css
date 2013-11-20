@@ -1,20 +1,16 @@
+/*global*/
+
 #viewport {
   //width: 320px;
   //height: 480px;
   overflow: hidden;
-  background: red;
+  //background: red;
 }
 
 .header {
   background: #ccc;
-}
-
-.header-bar {
-  background: #ccc;
-  position: fixed;
-  top: 0px;
   height: 40px;
-
+  padding-top: 10px;
 }
 
 .submenu {
@@ -22,8 +18,8 @@
 }
 
 .content {
-  //margin-top: 53px;
-  background: #eee;
+  margin-top: 73px;
+  //background: #eee;
 }
 
 .page {
@@ -32,11 +28,80 @@
   //height: 480px;
 }
 
-#nearby-list {
+
+/*main list view page*/
+
+#my-favorite-places-list {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  height: 100%;
+}
+
+#my-favorite-places-list nav {
+  position: fixed;
+  top: 0px;
+  z-index: 9999;
+  width: 100%;
+}
+
+#my-favorite-places-list .row {
+  margin-right: 0px;
+  margin-left: 0px;
+}
+
+#my-favorite-places-list .col-md-12 {
+  padding-right: 0px;
+  padding-left: 0px;
+}
+
+#my-favorite-places-list .submenu button {
+  width: 50%;
+}
+
+/*individual places screen slide over*/
+
+#place-screen {
+  background: green;
   width: 100%;
   height: 100%;
   position: fixed;
+  top: 0px;
+  left: 600px;
+  z-index: 0;
+}
+
+/*nearby list slide up*/
+
+#nearby-list {
+  width: 100%;
+  left:0px;
+  //height: 100%;
+  position: fixed;
   top: 800px;
-  background: green;
+  background: #fff;
   z-index: 9999;
 }
+
+#nearby-list .nearbylist-header {
+  background: #ccc;
+  height: 40px;
+  //padding-top: 10px;
+  width: 100%;
+}
+
+#nearby-list .row {
+  margin-right: 0px;
+  margin-left: 0px;
+}
+
+#nearby-list .col-md-12 {
+  padding-right: 0px;
+  padding-left: 0px;
+}
+
+#nearby-list .btn-close {
+  //float: right;
+}
+

@@ -32,25 +32,27 @@
 
 <body>
 
-    <div id="viewport">
+
+    <div id="viewport"> <!-- main viewport screen -->
+
+      <!-- favorite list view -->
       <div id="my-favorite-places-list" class="page">
-          <nav class="navbar-fixed-top">
+          <nav class="">
             <div class="row text-center header">
               <div class="col-md-12">Total Recall</div>
             </div>
             <div class="row submenu">
-              <div class="btn-group btn-group-justified">
-                <a type="button" class="btn btn-default active">View now</a>
-                <a type="button" class="btn btn-default">View all</a>
-              </div>
+              <button class="btn btn-default active" id="btn-viewnow">View now</a>
+              <button class="btn btn-default" id="btn-viewall">View all</a>
             </div>
           </nav>
           <div class="row content">
             <div class="col-md-12">
-              <div class="list-group">
-                <a href="#" class="list-group-item">
-                  Cras justo odio
-                </a>
+              <div class="list-group list-now"> <!-- list for now -->
+                <li class="list-group-item place-screen-1">Dapibus ac facilisis in</li>
+                <a href="" class="list-group-item">Morbi leo risus</a>
+              </div>
+              <div class="list-group list-all"> <!-- list for all -->
                 <a href="#" class="list-group-item">Dapibus ac facilisis in</a>
                 <a href="#" class="list-group-item">Morbi leo risus</a>
                 <a href="#" class="list-group-item">Porta ac consectetur ac</a>
@@ -73,12 +75,32 @@
           </div>
       </div>
 
-      <div id="nearby-list" class="page">
-          <nav class="navbar-fixed-top">
+      <div id="place-screen" class="page">
+          <nav class="">
             <div class="row text-center header">
-              <div class="col-md-12">
-                <button class="btn pull-left btn-close">Close</button>
-                Nearby places
+              <div class="col-md-12 text-center">
+                <button class="btn btn-back pull-left">Back</button>
+                Name of place
+                <button class="btn btn-save pull-right">Save</button>
+              </div>
+            </div>
+          </nav>
+          <div class="row content">
+            <div class="col-md-12">
+                content
+              </div>
+            </div>
+          </div>
+      </div>
+
+      <!-- nearby list slide up page -->
+      <div id="nearby-list" class="page">
+          <nav class="nearbylist-header">
+            <div class="row text-center header">
+              <div class="col-md-12 text-center">
+                <button class="btn btn-close pull-left">Cancel</button>
+                Select a favorite place nearby
+                <button class="btn btn-done pull-right">Done</button>
               </div>
             </div>
           </nav>
@@ -104,10 +126,9 @@
               </div>
             </div>
           </div>
-
       </div>
 
-    </div>
+    </div> <!-- end main viewport screen -->
 
 
 
@@ -125,16 +146,69 @@
 
     <script type="text/javascript" charset="utf-8">
 
+      //Main page
+
+      //slide back to list screen
+      $(".btn-back").click(function(){
+        $("#my-favorite-places-list").animate({
+          left: 0,
+          zIndex: 9999
+        }, 300);
+        $("#place-screen").animate({
+          left: 600,
+          zIndex: 9999
+        }, 300);
+        $("#btn-nearby").fadeIn("fast");
+      });
+
+      //slide over to place screen
+      $(".place-screen-1").click(function(){
+        $("#my-favorite-places-list").animate({
+          left: -800,
+          zIndex: 9999
+        }, 300);
+        $("#place-screen").animate({
+          left: 0,
+          zIndex: 9999
+        }, 300);
+        $("#btn-nearby").fadeOut("fast");
+      });
+
+
+      // hide List all on start
+      $(".list-all").hide();
+
+      // toggle view now list
+      $("#btn-viewnow").click(function(){
+        $("#btn-viewnow").addClass("active");
+        $("#btn-viewall").removeClass("active");
+        $(".list-now").show();
+        $(".list-all").hide();
+      });
+
+      // toggle view all list
+      $("#btn-viewall").click(function(){
+        $("#btn-viewall").addClass("active");
+        $("#btn-viewnow").removeClass("active");
+        $(".list-all").show();
+        $(".list-now").hide();
+      });
+
+      // animate up nearby list
       $("#btn-nearby").click(function(){
-        //alert("test");
         $("#nearby-list").animate({
           top: 0,
           zIndex: 9999
         }, 200);
 
         $("#nearby-list").css("position","absolute");
+        $("#nearby-list nav").css({
+          "position": "fixed",
+          zIndex: 9999
+        });
       })
 
+      // animate down nearby list
       $(".btn-close").click(function(){
         //alert("test");
         $("#nearby-list").animate({
@@ -143,6 +217,10 @@
         }, 200);
 
         $("#nearby-list").css("position","fixed");
+        $("#nearby-list nav").css({
+          "position": "relative",
+          zIndex: 9999
+        });
 
       })
 
