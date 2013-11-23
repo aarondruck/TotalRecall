@@ -110,18 +110,6 @@
                   <a href="#" class="list-group-item">
                     Cras justo odio
                   </a>
-                  <a href="#" class="list-group-item">Dapibus ac facilisis in</a>
-                  <a href="#" class="list-group-item">Morbi leo risus</a>
-                  <a href="#" class="list-group-item">Porta ac consectetur ac</a>
-                  <a href="#" class="list-group-item">Vestibulum at eros</a>
-                  <a href="#" class="list-group-item">Dapibus ac facilisis in</a>
-                  <a href="#" class="list-group-item">Morbi leo risus</a>
-                  <a href="#" class="list-group-item">Porta ac consectetur ac</a>
-                  <a href="#" class="list-group-item">Vestibulum at eros</a>
-                  <a href="#" class="list-group-item">Dapibus ac facilisis in</a>
-                  <a href="#" class="list-group-item">Morbi leo risus</a>
-                  <a href="#" class="list-group-item">Porta ac consectetur ac</a>
-                  <a href="#" class="list-group-item">Vestibulum at eros</a>
                 </div>
               </div>
             </div>
@@ -146,6 +134,42 @@
 
     <script type="text/javascript" charset="utf-8">
 
+      //geolocation
+      function getGeo() {
+
+        navigator.geolocation.getCurrentPosition(function (position) {
+            //alert(position.coords.latitude + ", " + position.coords.longitude);
+            var latitude = position.coords.latitude;
+            var longitude = position.coords.longitude;
+            $.getJSON('https://api.foursquare.com/v2/venues/search?ll='+latitude+','+longitude+'&query=bar&limit=10&client_id=2POUFAUU4ZBJ2MTDOY3S2YHR2NIT52FYW0LUTPHBMNTJFJNQ&client_secret=YFDZI1YWV3ZI5S5SPM2DZJEQIEBPIDJ5XFZBWTIKIQZVQNYM&v=20120101',
+            	    function(data) {
+            	       $.each(data.response.venues, function(i,venues){
+            	         console.log(data.response.venues);
+            				   $('#nearby-list .list-group').append('<a href="#" class="list-group-item">' + venues.name + '</a>');
+            	       });
+            	       //$('#resultsList').listview('refresh');
+            	       //$('#resultsList li').click(function() {
+                         //currentItem = $(this).index();
+                     //});
+                     //$('#display').on('pagebeforeshow', function() {
+                       //$(this).find('[data-role=header] .ui-title').text(data.response.venues[currentItem].name);
+                       //$('#nameofPlace').text(data.response.venues[currentItem].name);
+                       //$('#placeLocation').html("<a href='" + data.response.venues[currentItem].canonicalUrl + "' target=_blank>link</a>");
+                     //});
+            		});
+
+        },
+        function (position) {
+            alert("Failed to get your current location");
+            //geolocationDisplay.innerHTML = "Failed to get your current location";
+            //geolocationDisplay.style.display = "block";
+        });
+
+      }
+
+      getGeo();
+
+
       //Main page
 
       //slide back to list screen
@@ -159,6 +183,9 @@
           zIndex: 9999
         }, 300);
         $("#btn-nearby").fadeIn("fast");
+        $("#my-favorite-places-list nav").animate({
+          left: 0
+        }, 300);
       });
 
       //slide over to place screen
@@ -172,6 +199,9 @@
           zIndex: 9999
         }, 300);
         $("#btn-nearby").fadeOut("fast");
+        $("#my-favorite-places-list nav").animate({
+          left: -800
+        }, 300);
       });
 
 
@@ -196,6 +226,7 @@
 
       // animate up nearby list
       $("#btn-nearby").click(function(){
+
         $("#nearby-list").animate({
           top: 0,
           zIndex: 9999
