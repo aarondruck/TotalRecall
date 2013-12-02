@@ -50,7 +50,6 @@
             <div class="col-md-12">
               <div class="list-group list-now"> <!-- list for now -->
                 <li class="list-group-item place-screen-1">Dapibus ac facilisis in</li>
-                <a href="" class="list-group-item">Morbi leo risus</a>
               </div>
               <div class="list-group list-all"> <!-- list for all -->
                 <a href="#" class="list-group-item">Dapibus ac facilisis in</a>
@@ -106,11 +105,7 @@
           </nav>
           <div class="row content">
             <div class="col-md-12">
-                <div class="list-group">
-                  <a href="#" class="list-group-item">
-                    Cras justo odio
-                  </a>
-                </div>
+                <div class="list-group"></div>
               </div>
             </div>
           </div>
@@ -145,12 +140,43 @@
             	    function(data) {
             	       $.each(data.response.venues, function(i,venues){
             	         console.log(data.response.venues);
-            				   $('#nearby-list .list-group').append('<a href="#" class="list-group-item">' + venues.name + '</a>');
+            				   $('#nearby-list .list-group').append('<li class="list-group-item">' + venues.name + '</li>');
             	       });
             	       //$('#resultsList').listview('refresh');
-            	       //$('#resultsList li').click(function() {
-                         //currentItem = $(this).index();
-                     //});
+            	       $('#nearby-list .list-group li').click(function() {
+                         currentItem = $(this).index();
+                         $(".list-now").append('<li class="list-group-item">' + data.response.venues[currentItem].name + '</li>');
+
+                         //var testObject = { 'one': 1, 'two': 2, 'three': 3 };
+                         //var places = {};
+
+                         var places = {};
+                     	   places.url = "https://foursquare.com/v/" + data.response.venues[currentItem].id;
+                     	   places.name = data.response.venues[currentItem].name;
+                     	   //places.location = $('#placeLocation').html();
+                     	   //places.timeOfDay = $('#timeofday').html();
+                     	   //places.dayofWeek = $('#dayofweek').html();
+
+                         var newNameNoSpace = data.response.venues[currentItem].name.replace(/ /g,'');
+
+                         // Put the object into storage
+                         localStorage.setItem('favePlaces' + newNameNoSpace, JSON.stringify(places));
+
+                         // Retrieve the object from storage
+                         //var retrievedObject = localStorage.getItem('testObject');
+
+                         //console.log('retrievedObject: ', JSON.parse(retrievedObject));
+
+                         // $("#nearby-list").animate({
+                         //   top: 900,
+                         //   zIndex: 0
+                         // }, 200);
+                         // $("#nearby-list").css("position","fixed");
+                         // $("#nearby-list nav").css({
+                         //   "position": "relative",
+                         //   zIndex: 9999
+                         // });
+                     });
                      //$('#display').on('pagebeforeshow', function() {
                        //$(this).find('[data-role=header] .ui-title').text(data.response.venues[currentItem].name);
                        //$('#nameofPlace').text(data.response.venues[currentItem].name);
@@ -168,6 +194,11 @@
       }
 
       getGeo();
+
+      // animate down nearby list
+      $(".btn-done").click(function(){
+
+      })
 
 
       //Main page
