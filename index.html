@@ -205,6 +205,7 @@
           $(".list-all").html('<p>You have no favorites.</p>');
       	}
         else {
+          $("#btn-nearby").fadeIn("fast");
           $(".list-now").empty();
           $(".list-all").empty();
           for (var i = 0; i < localStorage.length; i++){
@@ -214,12 +215,12 @@
               // otherwise show all
               $(".list-all").append('<li class="list-group-item place-screen-1">' + result.name + '</li>');
     	    }
-    	    $('.list-group-item').click(function() {
+    	    $('.list-now .list-group-item').click(function() {
             moveToFavePage();
             currentListItem = $(this).index();
             var nameofItem = JSON.parse(localStorage.getItem(localStorage.key(currentListItem)));
-            console.log(nameofItem.name);
-            //$("#place-screen h1").html(nameofItem.name);
+            //console.log(nameofItem.name);
+            $("#place-screen h1").html(nameofItem.name);
           });
         }
       }
