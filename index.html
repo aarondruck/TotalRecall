@@ -218,8 +218,8 @@
             moveToFavePage();
             currentListItem = $(this).index();
             var nameofItem = JSON.parse(localStorage.getItem(localStorage.key(currentListItem)));
-            //alert(nameofItem.name);
-            $("#place-screen h1").html(nameofItem.name);
+            console.log(nameofItem.name);
+            //$("#place-screen h1").html(nameofItem.name);
           });
         }
       }
