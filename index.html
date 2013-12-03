@@ -25,8 +25,8 @@
         <!-- Localization -->
     <link rel="resource" type="application/l10n" href="locales/locales.ini" />
     <script type="application/javascript" src="js/l10n.js"></script>
-    <script type="application/javascript" src="js/bootstrap.min.js"></script>
     <script type="application/javascript" src="js/jquery-1.10.2.min.js"></script>
+    <script type="application/javascript" src="js/bootstrap.min.js"></script>
     <base target="_blank">
 </head>
 
@@ -49,21 +49,11 @@
           <div class="row content">
             <div class="col-md-12">
               <div class="list-group list-now"> <!-- list for now -->
-                <li class="list-group-item place-screen-1">Dapibus ac facilisis in</li>
+                <p class="noFavoritesListItem text-center">You have no favorites</p>
+                <!-- <li class="list-group-item place-screen-1">Dapibus ac facilisis in</li> -->
               </div>
               <div class="list-group list-all"> <!-- list for all -->
-                <a href="#" class="list-group-item">Dapibus ac facilisis in</a>
-                <a href="#" class="list-group-item">Morbi leo risus</a>
-                <a href="#" class="list-group-item">Porta ac consectetur ac</a>
-                <a href="#" class="list-group-item">Vestibulum at eros</a>
-                <a href="#" class="list-group-item">Dapibus ac facilisis in</a>
-                <a href="#" class="list-group-item">Morbi leo risus</a>
-                <a href="#" class="list-group-item">Porta ac consectetur ac</a>
-                <a href="#" class="list-group-item">Vestibulum at eros</a>
-                <a href="#" class="list-group-item">Dapibus ac facilisis in</a>
-                <a href="#" class="list-group-item">Morbi leo risus</a>
-                <a href="#" class="list-group-item">Porta ac consectetur ac</a>
-                <a href="#" class="list-group-item">Vestibulum at eros</a>
+                <p class="noFavoritesListItem text-center">You have no favorites</p>
               </div>
             </div>
           </div>
@@ -79,8 +69,8 @@
             <div class="row text-center header">
               <div class="col-md-12 text-center">
                 <button class="btn btn-back pull-left">Back</button>
-                Name of place
-                <button class="btn btn-save pull-right">Save</button>
+                <h1>Name of place</h1>
+                <button class="btn btn-delete pull-right">Delete</button>
               </div>
             </div>
           </nav>
@@ -97,9 +87,8 @@
           <nav class="nearbylist-header">
             <div class="row text-center header">
               <div class="col-md-12 text-center">
-                <button class="btn btn-close pull-left">Cancel</button>
                 Select a favorite place nearby
-                <button class="btn btn-done pull-right">Done</button>
+                <button class="btn btn-close pull-right">Cancel</button>
               </div>
             </div>
           </nav>
@@ -129,6 +118,37 @@
 
     <script type="text/javascript" charset="utf-8">
 
+      refreshMainList();
+
+      //Get the Day of the week
+      var date = new Date();
+      var weekday=new Array(7);
+			weekday[0]="Sunday";
+			weekday[1]="Monday";
+			weekday[2]="Tuesday";
+			weekday[3]="Wednesday";
+			weekday[4]="Thursday";
+			weekday[5]="Friday";
+			weekday[6]="Saturday";
+			var savedDayofWeek = weekday[date.getDay()];
+
+			//Get the Time of Day between certain times
+      var dd = "am";
+			var hour = date.getHours();
+			var nexthour = date.getHours() + 1;
+			if (hour > 12) {
+          hour -= 12;
+      } else if (hour === 0) {
+         hour = 12;
+      }
+      if (nexthour > 12) {
+          nexthour -= 12;
+          dd = "pm";
+      } else if (nexthour === 0) {
+         nexthour = 12;
+      }
+			var savedTimeofDay = hour+"-"+nexthour+dd;
+
       //geolocation
       function getGeo() {
 
@@ -142,46 +162,32 @@
             	         console.log(data.response.venues);
             				   $('#nearby-list .list-group').append('<li class="list-group-item">' + venues.name + '</li>');
             	       });
-            	       //$('#resultsList').listview('refresh');
             	       $('#nearby-list .list-group li').click(function() {
+            	           $(".noFavoritesListItem").hide();
                          currentItem = $(this).index();
-                         $(".list-now").append('<li class="list-group-item">' + data.response.venues[currentItem].name + '</li>');
-
-                         //var testObject = { 'one': 1, 'two': 2, 'three': 3 };
-                         //var places = {};
-
                          var places = {};
+                         places.name = data.response.venues[currentItem].name;
                      	   places.url = "https://foursquare.com/v/" + data.response.venues[currentItem].id;
-                     	   places.name = data.response.venues[currentItem].name;
-                     	   //places.location = $('#placeLocation').html();
-                     	   //places.timeOfDay = $('#timeofday').html();
-                     	   //places.dayofWeek = $('#dayofweek').html();
-
+                     	   //places.location =
+                     	   places.timeOfDay = savedTimeofDay;
+                     	   places.dayofWeek = savedDayofWeek;
                          var newNameNoSpace = data.response.venues[currentItem].name.replace(/ /g,'');
-
                          // Put the object into storage
                          localStorage.setItem('favePlaces' + newNameNoSpace, JSON.stringify(places));
 
-                         // Retrieve the object from storage
-                         //var retrievedObject = localStorage.getItem('testObject');
+                         $("#nearby-list").animate({
+                           top: 900,
+                           zIndex: 0
+                         }, 200);
+                         $("#nearby-list").css("position","fixed");
+                         $("#nearby-list nav").css({
+                           "position": "relative",
+                           zIndex: 9999
+                         });
 
-                         //console.log('retrievedObject: ', JSON.parse(retrievedObject));
-
-                         // $("#nearby-list").animate({
-                         //   top: 900,
-                         //   zIndex: 0
-                         // }, 200);
-                         // $("#nearby-list").css("position","fixed");
-                         // $("#nearby-list nav").css({
-                         //   "position": "relative",
-                         //   zIndex: 9999
-                         // });
+                         //refresh the main lists
+                         refreshMainList();
                      });
-                     //$('#display').on('pagebeforeshow', function() {
-                       //$(this).find('[data-role=header] .ui-title').text(data.response.venues[currentItem].name);
-                       //$('#nameofPlace').text(data.response.venues[currentItem].name);
-                       //$('#placeLocation').html("<a href='" + data.response.venues[currentItem].canonicalUrl + "' target=_blank>link</a>");
-                     //});
             		});
 
         },
@@ -193,7 +199,30 @@
 
       }
 
-      getGeo();
+      function refreshMainList() {
+        if (localStorage.length == 0){
+      	  $(".list-now").html('<p>You have no favorites.</p>');
+          $(".list-all").html('<p>You have no favorites.</p>');
+      	}
+        else {
+          $(".list-now").empty();
+          $(".list-all").empty();
+          for (var i = 0; i < localStorage.length; i++){
+    	      	var result = JSON.parse( localStorage.getItem(localStorage.key(i)));
+    	      	//if the time is now
+    	      	$(".list-now").append('<li class="list-group-item place-screen-1">' + result.name + '</li>');
+              // otherwise show all
+              $(".list-all").append('<li class="list-group-item place-screen-1">' + result.name + '</li>');
+    	    }
+    	    $('.list-group-item').click(function() {
+            moveToFavePage();
+            currentListItem = $(this).index();
+            var nameofItem = JSON.parse(localStorage.getItem(localStorage.key(currentListItem)));
+            //alert(nameofItem.name);
+            $("#place-screen h1").html(nameofItem.name);
+          });
+        }
+      }
 
       // animate down nearby list
       $(".btn-done").click(function(){
@@ -203,8 +232,8 @@
 
       //Main page
 
-      //slide back to list screen
-      $(".btn-back").click(function(){
+      //animate back to Main view
+      function animateBackToMainView() {
         $("#my-favorite-places-list").animate({
           left: 0,
           zIndex: 9999
@@ -217,10 +246,19 @@
         $("#my-favorite-places-list nav").animate({
           left: 0
         }, 300);
+      }
+
+      //slide back to list screen
+      $(".btn-back").click(function(){
+        animateBackToMainView();
       });
 
       //slide over to place screen
       $(".place-screen-1").click(function(){
+        moveToFavePage();
+      });
+
+      function moveToFavePage() {
         $("#my-favorite-places-list").animate({
           left: -800,
           zIndex: 9999
@@ -233,8 +271,7 @@
         $("#my-favorite-places-list nav").animate({
           left: -800
         }, 300);
-      });
-
+      }
 
       // hide List all on start
       $(".list-all").hide();
@@ -258,6 +295,8 @@
       // animate up nearby list
       $("#btn-nearby").click(function(){
 
+        $("#btn-nearby").fadeOut("fast");
+
         $("#nearby-list").animate({
           top: 0,
           zIndex: 9999
@@ -272,7 +311,8 @@
 
       // animate down nearby list
       $(".btn-close").click(function(){
-        //alert("test");
+        $("#btn-nearby").fadeIn("fast");
+
         $("#nearby-list").animate({
           top: 900,
           zIndex: 0
@@ -285,6 +325,18 @@
         });
 
       })
+
+      $(".btn-delete").click(function(){
+        //remove favorite from local storage
+        var itemKey = $("#place-screen h1").html().replace(/ /g,'');
+        localStorage.removeItem('favePlaces'+ itemKey);
+
+        //and animate back
+        animateBackToMainView();
+        refreshMainList();
+      });
+
+      getGeo();
 
     </script>
 
