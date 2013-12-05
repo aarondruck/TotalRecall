@@ -32,7 +32,6 @@
 
 <body>
 
-
     <div id="viewport"> <!-- main viewport screen -->
 
       <!-- favorite list view -->
@@ -84,6 +83,14 @@
 
       <!-- nearby list slide up page -->
       <div id="nearby-list" class="page">
+
+          <div id="spinner">
+            <div class="loading">Getting your location...</div>
+            <div class="lat"></div>
+            <div class="long"></div>
+          </div>
+
+
           <nav class="nearbylist-header">
             <div class="row text-center header">
               <div class="col-md-12 text-center">
@@ -150,6 +157,60 @@
 			var savedTimeofDay = hour+"-"+nexthour+dd;
       console.log("test");
       //geolocation
+
+      function getGeo2() {
+
+        var options = {
+            enableHighAccuracy: true,
+            timeout: 10000,
+            maximumAge: 0
+        };
+
+        function success(pos) {
+            var crd = pos.coords;
+
+            console.log('Your current position is:');
+            console.log('Latitude : ' + crd.latitude);
+            console.log('Longitude: ' + crd.longitude);
+            console.log('More or less ' + crd.accuracy + ' meters.');
+
+            //start spinner
+            $(".lat").html(crd.latitude);
+            $(".long").html(crd.longitude);
+
+        };
+
+        function error(err) {
+            console.warn('ERROR(' + err.code + '): ' + err.message);
+        };
+
+        navigator.geolocation.watchPosition(success, error, options);
+
+      }
+
+      //Timer running
+      function startTimer() {
+        var startTime = new Date();
+        function SetTime(){
+          var curTime = new Date();
+          var seconds = Math.round((curTime - startTime) / 1000);
+          console.log(seconds);
+          checkDiv();
+        };
+        // interval fires SetTime every 1 sec
+        var interval = setInterval(SetTime, 30000);
+        console.log(interval);
+      }
+
+      function checkDiv() {
+        $('.lat').each(function(){
+          if($(this).html()==''){
+            console.log("lat is empty");
+            //$(this).prev('.child_1').html('');
+          }
+        });
+      }
+
       function getGeo() {
         console.log("testing");
 
@@ -162,9 +223,11 @@
             console.log(latitude);
             console.log(longitude);
 
-            if(latitude === 'undefined') {
-              alert("test");
-            }
+            //$(".lat").html(crd.latitude);
+            //$(".long").html(crd.longitude);
+
+            alert(latitude);
+            alert(longitude);
 
             // $.getJSON('https://api.foursquare.com/v2/venues/search?ll='+latitude+','+longitude+'&query=bar&limit=10&client_id=2POUFAUU4ZBJ2MTDOY3S2YHR2NIT52FYW0LUTPHBMNTJFJNQ&client_secret=YFDZI1YWV3ZI5S5SPM2DZJEQIEBPIDJ5XFZBWTIKIQZVQNYM&v=20120101',
             //                  function(data) {
@@ -307,6 +370,8 @@
       $("#btn-nearby").click(function(){
 
         getGeo();
+        //getGeo2();
+        checkDiv();
 
         $("#btn-nearby").fadeOut("fast");
 
