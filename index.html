@@ -83,14 +83,6 @@
 
       <!-- nearby list slide up page -->
       <div id="nearby-list" class="page">
-
-          <div id="spinner">
-            <div class="loading">Getting your location...</div>
-            <div class="lat"></div>
-            <div class="long"></div>
-          </div>
-
-
           <nav class="nearbylist-header">
             <div class="row text-center header">
               <div class="col-md-12 text-center">
@@ -101,12 +93,12 @@
           </nav>
           <div class="row content">
             <div class="col-md-12">
+                <div class="spinner"><img src="images/assets/spinnerLarge.gif"> Loading places...</div>
                 <div class="list-group"></div>
               </div>
             </div>
           </div>
       </div>
-
     </div> <!-- end main viewport screen -->
 
 
@@ -199,8 +191,8 @@
             console.log('More or less ' + crd.accuracy + ' meters.');
 
             //start spinner
-            $(".lat").html(crd.latitude);
-            $(".long").html(crd.longitude);
+            //$(".lat").html(crd.latitude);
+            //$(".long").html(crd.longitude);
 
         };
 
@@ -214,27 +206,29 @@
 
       // get geoolcation and get Foursquare locations
       function getGeo() {
-        console.log("testing");
+
+        //console.log("testing");
 
         navigator.geolocation.getCurrentPosition(function (position) {
 
-            console.log("checking location");
+            //console.log("checking location");
             var latitude = position.coords.latitude;
             var longitude = position.coords.longitude;
 
-            console.log(latitude);
-            console.log(longitude);
+            //console.log(latitude);
+            //console.log(longitude);
 
-            //$(".lat").html(crd.latitude);
-            //$(".long").html(crd.longitude);
+            //$(".lat").html(latitude);
+            //$(".long").html(longitude);
 
-            alert(latitude);
-            alert(longitude);
+            //alert(latitude);
+            //alert(longitude);
 
             $.getJSON('https://api.foursquare.com/v2/venues/search?ll='+latitude+','+longitude+'&query=bar&limit=10&client_id=2POUFAUU4ZBJ2MTDOY3S2YHR2NIT52FYW0LUTPHBMNTJFJNQ&client_secret=YFDZI1YWV3ZI5S5SPM2DZJEQIEBPIDJ5XFZBWTIKIQZVQNYM&v=20120101',
                              function(data) {
                                 $.each(data.response.venues, function(i,venues){
                                   console.log(data.response.venues);
+                                  $(".spinner").hide();
                                   $('#nearby-list .list-group').append('<li class="list-group-item">' + venues.name + '</li>');
                                 });
                                 $('#nearby-list .list-group li').click(function() {
@@ -370,9 +364,9 @@
 
       // animate up nearby list
       $("#btn-nearby").click(function(){
-
-        //getGeo();
-        getGeo2();
+        $(".spinner").show();
+        getGeo();
+        //getGeo2();
         //checkDiv();
 
         $("#btn-nearby").fadeOut("fast");
