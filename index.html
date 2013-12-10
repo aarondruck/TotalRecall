@@ -206,6 +206,8 @@
 
       function getGeo3() {
 
+
+
         var options = {
             enableHighAccuracy: true,
             timeout: 300000,
@@ -213,6 +215,7 @@
         };
 
         function success(pos) {
+            console.log("fire");
             var crd = pos.coords;
 
             //console.log('Your current position is:');
@@ -232,10 +235,14 @@
                                 $.each(data.response.venues, function(i,venues){
                                   console.log(data.response.venues);
                                   $(".spinner").hide();
-                                  //$('#nearby-list .list-group').empty();
+                                  //('.list-group-item').empty();
+                                  //$('#nearby-list .list-group')
+                                  //location.reload(true);
+
                                   $('#nearby-list .list-group').append('<li class="list-group-item">' + venues.name + '</li>');
                                 });
                                 $('#nearby-list .list-group li').click(function() {
+
                                     $(".noFavoritesListItem").hide();
                                      currentItem = $(this).index();
                                      var places = {};
@@ -270,7 +277,7 @@
             console.warn('ERROR(' + err.code + '): ' + err.message);
         };
 
-        navigator.geolocation.watchPosition(success, error, options);
+        navigator.geolocation.getCurrentPosition(success, error, options);
 
       }
 
@@ -301,6 +308,7 @@
                                   $(".spinner").hide();
                                   $('#nearby-list .list-group').empty();
                                   $('#nearby-list .list-group').append('<li class="list-group-item">' + venues.name + '</li>');
+
                                 });
                                 $('#nearby-list .list-group li').click(function() {
                                     $(".noFavoritesListItem").hide();
@@ -340,6 +348,9 @@
       }
 
       function refreshMainList() {
+
+        $('#nearby-list .list-group li.list-group-item').remove();
+
         if (localStorage.length == 0){
       	  $(".list-now").html('<p>You have no favorites.</p>');
           $(".list-all").html('<p>You have no favorites.</p>');
@@ -455,8 +466,14 @@
         });
       })
 
+
       // animate down nearby list
       $(".btn-close").click(function(){
+
+        //$('#nearby-list .list-group').html('asdf');
+        //$('#nearby-list .list-group').empty();
+        $('#nearby-list .list-group li.list-group-item').remove();
+        //$('.list-group-item').remove();
         $("#btn-nearby").fadeIn("fast");
 
         $("#nearby-list").animate({
