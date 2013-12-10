@@ -93,7 +93,7 @@
           </nav>
           <div class="row content">
             <div class="col-md-12">
-                <div class="spinner"><img src="images/assets/spinnerLarge.gif"> Loading places...</div>
+                <div class="spinner text-center"><img src="images/assets/spinnerLarge.gif"> Loading places...</div>
                 <div class="list-group"></div>
               </div>
             </div>
@@ -204,6 +204,76 @@
 
       }
 
+      function getGeo3() {
+
+        var options = {
+            enableHighAccuracy: true,
+            timeout: 300000,
+            maximumAge: 0
+        };
+
+        function success(pos) {
+            var crd = pos.coords;
+
+            //console.log('Your current position is:');
+            //console.log('Latitude : ' + crd.latitude);
+            //console.log('Longitude: ' + crd.longitude);
+            //console.log('More or less ' + crd.accuracy + ' meters.');
+
+            //start spinner
+            //$(".lat").html(crd.latitude);
+            //$(".long").html(crd.longitude);
+
+            var latitude = crd.latitude;
+            var longitude = crd.longitude;
+
+            $.getJSON('https://api.foursquare.com/v2/venues/search?ll='+latitude+','+longitude+'&query=bar&limit=10&client_id=2POUFAUU4ZBJ2MTDOY3S2YHR2NIT52FYW0LUTPHBMNTJFJNQ&client_secret=YFDZI1YWV3ZI5S5SPM2DZJEQIEBPIDJ5XFZBWTIKIQZVQNYM&v=20120101',
+                             function(data) {
+                                $.each(data.response.venues, function(i,venues){
+                                  console.log(data.response.venues);
+                                  $(".spinner").hide();
+                                  //$('#nearby-list .list-group').empty();
+                                  $('#nearby-list .list-group').append('<li class="list-group-item">' + venues.name + '</li>');
+                                });
+                                $('#nearby-list .list-group li').click(function() {
+                                    $(".noFavoritesListItem").hide();
+                                     currentItem = $(this).index();
+                                     var places = {};
+                                     places.name = data.response.venues[currentItem].name;
+                                      places.url = "https://foursquare.com/v/" + data.response.venues[currentItem].id;
+                                      //places.location =
+                                      places.timeOfDay = savedTimeofDay;
+                                      places.dayofWeek = savedDayofWeek;
+                                     var newNameNoSpace = data.response.venues[currentItem].name.replace(/ /g,'');
+                                     // Put the object into storage
+                                     localStorage.setItem('favePlaces' + newNameNoSpace, JSON.stringify(places));
+
+                                     $("#nearby-list").animate({
+                                       top: 900,
+                                       zIndex: 0
+                                     }, 200);
+                                     $("#nearby-list").css("position","fixed");
+                                     $("#nearby-list nav").css({
+                                       "position": "relative",
+                                       zIndex: 9999
+                                     });
+
+                                     //refresh the main lists
+                                     refreshMainList();
+                                 });
+                           });
+
+
+        };
+
+        function error(err) {
+            console.warn('ERROR(' + err.code + '): ' + err.message);
+        };
+
+        navigator.geolocation.watchPosition(success, error, options);
+
+      }
+
       // get geoolcation and get Foursquare locations
       function getGeo() {
 
@@ -229,6 +299,7 @@
                                 $.each(data.response.venues, function(i,venues){
                                   console.log(data.response.venues);
                                   $(".spinner").hide();
+                                  $('#nearby-list .list-group').empty();
                                   $('#nearby-list .list-group').append('<li class="list-group-item">' + venues.name + '</li>');
                                 });
                                 $('#nearby-list .list-group li').click(function() {
@@ -365,9 +436,10 @@
       // animate up nearby list
       $("#btn-nearby").click(function(){
         $(".spinner").show();
-        getGeo();
+        //getGeo();
         //getGeo2();
         //checkDiv();
+        getGeo3();
 
         $("#btn-nearby").fadeOut("fast");
 
